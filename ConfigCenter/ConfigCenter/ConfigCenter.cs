@@ -16,10 +16,10 @@ namespace ConfigCenter
 
         private static readonly JsonServiceClient Client = new JsonServiceClient("http://configcenter.xx.com/api");
 
-        public static void Init()
+        public static void Init(string appId)
         {
-            SyncVersion();
-            _task = new Task(SyncVersion, 10000, 10000);
+            SyncVersion(appId);  //先同步获取一次，保证global之后执行的代码的都能获取到配置
+            _task = new Task(SyncVersion, appId, 10000, 10000);
         }
 
         public static void Stop()
@@ -27,9 +27,9 @@ namespace ConfigCenter
             _task.Stop();
         }
 
-        private static void SyncVersion()
+        private static void SyncVersion(string appid)
         {
-            var appVersionResponse = Client.Get(new GetAppVersion { AppId = "Account" });
+            var appVersionResponse = Client.Get(new GetAppVersion { AppId = appid });
             if (appVersionResponse.AppDto != null)
             {
                 if (_currentVersion != appVersionResponse.AppDto.Version) //客户端保存的版本号和服务端的版本号不一致，需要客户端去更新
