@@ -16,8 +16,8 @@ namespace ConfigCenter.Admin.Controllers
         public ActionResult Index(int pageindex = 1, int appId = 0, string kword = "")
         {
             long totalItem;
-            var dto = AppSettingBusiness.GetAppSettings(appId, pageindex, 1, kword, out totalItem);
-            return View(new PagedList<AppSettingDto>(dto, pageindex, 1, (int)totalItem));
+            var dto = AppSettingBusiness.GetAppSettings(appId, pageindex,20, kword, out totalItem);
+            return View(new PagedList<AppSettingDto>(dto, pageindex, 20, (int)totalItem));
         }
 
         public JsonResult GetAppSettingById(int id)
